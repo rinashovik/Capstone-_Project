@@ -14,7 +14,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.Optional;
 
 @Controller
@@ -37,12 +36,13 @@ public class AuthenticationController {
         }
         return user.get();
     }
+
     private static void setUserInSession(HttpSession session, User user) {
         session.setAttribute(userSessionKey, user.getId());
     }
 
     @GetMapping("/register")
-    public String displayRegistrationFOrm(Model model) {
+    public String displayRegistrationForm(Model model) {
         model.addAttribute(new RegisterFormDTO());
         model.addAttribute("title", "Register");
         return "register";
@@ -59,9 +59,16 @@ public class AuthenticationController {
         }
 
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
+        User existingUserByEmail = userRepository.findByEmail(registerFormDTO.getEmail());
 
         if (existingUser != null) {
-            errors.rejectValue("username", "username.alreadyexists", "A user with that username already exists");
+            errors.rejectValue("username", "username.alreadyexists", "That username already exists, try a different one");
+            model.addAttribute("title", "Register");
+            return "register";
+        }
+
+        if (existingUserByEmail != null) {
+            errors.rejectValue("email", "email.alreadyexists", "That email already exists, try a different one.");
             model.addAttribute("title", "Register");
             return "register";
         }
@@ -69,16 +76,23 @@ public class AuthenticationController {
         String password = registerFormDTO.getPassword();
         String verifyPassword = registerFormDTO.getVerifyPassword();
         if (!password.equals(verifyPassword)) {
-            errors.rejectValue("password", "passwords.mismatch", "Passwords do not match");
+            errors.rejectValue("password", "passwords.mismatch", "Passwords do not match, please try again.");
             model.addAttribute("title", "Register");
             return "register";
         }
 
-        User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
+        User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getEmail(),registerFormDTO.getPassword());
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
         return "redirect:";
+    }
+
+    @GetMapping("/login")
+    public String displayLoginForm(Model model) {
+        model.addAttribute(new LoginFormDTO());
+        model.addAttribute("title", "Log In");
+        return "login";
     }
 
     @PostMapping("/login")
