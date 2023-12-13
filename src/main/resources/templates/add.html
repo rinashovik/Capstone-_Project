@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}">
+</head>
+<body class="container body-content">
+<nav th:replace="~{fragments :: page-header}"></nav>
+<!--<div th:replace="~{fragments :: page-header}"></div>-->
+
+
+<div class="container fixed-bottom mt-3">
+<!--    <div class="fixed-bottom">...</div>-->
+
+    <ul>
+        <li class="row" th:each="job : ${tasks}">
+            <a th:href="@{'/edit/' + ${job.id}}" th:text="${job.description}"></a>
+<!--            <td><a th:href="@{/edit/{id}(id=${job.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>-->
+        </li>
+    </ul>
+    <div>
+        <form method="post"  class="d-flex d-grid">
+            <div class="form-group">
+                <!--        <label th:for="description">Task Description</label>-->
+                <button th:for="description" class="btn btn-success btn-md" type="submit">Add Task</button>
+                <input class="form-control" th:field="${task.description}" type="text" placeholder="Try Typing" />
+                <span th:errors="${task.description}" class="error"></span>
+            </div>
+<!--            <input type="submit" value="Add Task" /> doesn't effect-->
+        </form>
+    </div>
+        </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}">
+</head>
+<body>
+<nev th:replace="~{fragments :: page-header}"></nev>
+<div class="container body-content text-white text-bg-warning mt-3">
+
+
+<!--                <td><a th:href="@{/edit/{id}(id=${task.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>-->
+    <div>
+        <form method="post"  class="d-flex d-grid" style="max-width:600px;">
+            <div th:for="description" class="form-group">
+                <!--        <label th:for="description">Task Description</label>-->
+                <input class="form-control" th:field="${task.description}" type="text" placeholder="Try Typing" />
+                <button  class="btn btn-success btn-md" type="submit">Save Task</button>
+                <span th:errors="${task.description}" class="error"></span>
+
+            </div>
+            <!--            <input type="submit" value="Add Task" /> doesn't effect-->
+        </form>
+    </div>
+<!--        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">-->
+<!--            Delete-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</form>-->
+
+</div>
+</body>
+</html>

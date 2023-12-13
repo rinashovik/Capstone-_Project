@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="row">
+            <div class="col p-3 bg-primary text-white">New Task
+                <li th:block th:each="job : ${tasks}">
+                    <!--            <a th:href="@{'/view/' + ${job.id}}" th:text="${job.description}"></a>-->
+                    <input type="radio" name="tasks" th:value="${job.id}">
+
+                    <label th:text="${job.description}"></label>
+            </div>
+            <div class="col p-3 bg-primary text-white">In Progress</div>
+            <div class="col p-3 bg-primary text-white">Completed Task</div>
+        </div>
+        </div>
+    <!--<table >-->
+
+</body>
+</html>
