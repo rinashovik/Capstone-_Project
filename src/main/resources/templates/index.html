@@ -3,50 +3,38 @@
 <head th:replace="~{fragments :: head}">
 </head>
 <body>
-<div th:replace="~{fragments :: page-header}"></div>
-<div class="container body-content text-white text-bg-warning mt-3">
-<!--    <div class="container-fluid mt-3">-->
+<header th:replace="~{fragments :: page-header}"></header>
+<div class="container body-content g-col-8 text-white text-bg-secondary mt-3">
         <h2 class="text-white text-bg-warning">New Tasks</h2>
 
-    <div class="row">
-<!--        <div class="col p-3 bg-primary text-white">New Task</div>-->
-<!--        <div class="col p-3 bg-primary text-white">In Progress</div>-->
-<!--        <div class="col p-3 bg-primary text-white">Completed Task</div>-->
-<!--    </div>-->
-<!--    </div>-->
 <!--<table >-->
+    <div class="row">
 
         <div class="container">
+            <div class="job-listing">
+
             <div class="row align-items-start">
                 <div class="col">
                     <ul >
-                        <li th:block th:each="job : ${tasks}">
-                            <button th:for="description" class="btn btn-primary btn-md" type="submit">Update Task</button>
-                            <button th:for="description" class="btn btn-danger btn-md" type="submit">Delete</button>
+                        <div th:block th:each="job : ${tasks}">
+<!--                            <button th:for="description" class="btn btn-primary btn-md" type="submit">Update Task</button>-->
+<!--                            <button th:for="description" class="btn btn-danger btn-md" type="submit">Delete</button>-->
 
                             <!--            <a th:href="@{'/view/' + ${job.id}}" th:text="${job.description}"></a>-->
                             <input type="radio" name="tasks" th:value="${job.id}">
 
                             <label th:text="${job.description}"></label>
-                        </li>
+                        </div>
 <!--                        <button th:for="description" class="btn btn-primary btn-md" type="submit">Update Task</button>-->
 
                     </ul>
                 </div>
             </div>
-        </div>
-</div>
-
-
-
-</div>
-
-<!--<div>-->
-<!--            <form method="post"  class="form-inline my-2 my-lg-0">-->
-<!--                th:errors="${task.description}" class="error"></span>-->
-<!--                </div>-->
-<!--            </form>-->
+<!--        </div>-->
 <!--</div>-->
+
+    </div>
+</div>
 <div>
     <form method="post"  class=" container d-flex d-grid" >
         <div class="form-group">

@@ -9,12 +9,34 @@
 
 <!--                <td><a th:href="@{/edit/{id}(id=${task.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>-->
     <div>
-        <form method="post"  class="d-flex d-grid" style="max-width:600px;">
-            <div th:for="description" class="form-group">
+<!--        <form method="post"  class="d-flex d-grid">-->
+
+<!--        <main>-->
+<!--            <form action='/delete' method='POST'>-->
+<!--                <h3>Delete Task</h3>-->
+<!--                <th:block th:each="job : ${jobs}">-->
+<!--                    <label>-->
+<!--                        <input type="checkbox" name="jobId" th:value="${job.id}" />-->
+<!--                        <span th:text="${job.description}"></span> &lt;!&ndash; implicitly calls toString() &ndash;&gt;-->
+<!--                    </label><br />-->
+<!--                </th:block>-->
+<!--                <button class="delete btn btn-danger btn-md" type='submit'>Delete Task</button>-->
+<!--            </form>-->
+<!--        </main>-->
+
+
+            <form method="post" class="d-flex d-grid" th:action="edit/{id}">
+
+<!--                <form method="post" class="d-flex d-grid" th:action="edit/{taskId}" th:object="${task}">-->
+
+                <!--                <a th:href="@{'/edit/' + ${job.id}}" th:text="${job.description}"></a>-->
+
+            <div th:for="description" class="form-group col-md-6">
                 <!--        <label th:for="description">Task Description</label>-->
-                <input class="form-control" th:field="${task.description}" type="text" placeholder="Try Typing" />
                 <button  class="btn btn-success btn-md" type="submit">Save Task</button>
+                <input class="form-control" th:field="${task.description}" name="jobId" th:value="${job.id}" type="text" placeholder="Try Typing" />
                 <span th:errors="${task.description}" class="error"></span>
+<!--                <button type='submit'>Add Task</button>-->
 
             </div>
             <!--            <input type="submit" value="Add Task" /> doesn't effect-->
@@ -25,6 +47,35 @@
 <!--        </button>-->
 <!--    </div>-->
 <!--</form>-->
+
+<!--    <form method="post"  class="d-flex d-grid" th:action="@{/students/update/{id}(id=${student.id})}" th:object="${student}">-->
+<!--        <div class="row">-->
+<!--            <div class="form-group col-md-6">-->
+<!--                <label for="description" class="col-form-label">Name</label> -->
+<!--                <input type="text" th:field="*{name}" class="form-control" placeholder="Name"> -->
+<!--                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>-->
+<!--            </div>-->
+<!--           -->
+
+<!--            <div class="form-group col-md-8">-->
+<!--                <input type="submit" class="btn btn-primary" value="Update Student">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+
+<!--    <div class="form-item col-4">-->
+<!--        <label th:for="artist">Artist</label>-->
+<!--        <select th:field="${artwork.artist}">-->
+<!--            <option value="">Select an Task</option>-->
+<!--            <option th:each="job : ${jobs}"-->
+<!--                    th:value="${job.id}"-->
+<!--                    th:text="${job.id}"-->
+<!--            ></option>-->
+<!--        </select>-->
+<!--        <p class="error" th:errors="${task.id}"></p>-->
+<!--    </div>-->
+</div>
+
 
 </div>
 </body>

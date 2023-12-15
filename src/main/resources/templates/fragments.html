@@ -13,29 +13,32 @@
 <body>
 <div th:fragment="page-header" class="navbar navbar-inverse navbar-fixed-top">
 
-<!--<div th:fragment="page-header" class="navbar navbar-inverse navbar-fixed-top justify-content-center">-->
+    <!--<div th:fragment="page-header" class="navbar navbar-inverse navbar-fixed-top justify-content-center">-->
     <div class="container">
         <div class="navbar-header">
             <a th:href="@{/}" class="navbar-brand">ProcrastiNOT</a>
+            <li><a class="navlink" href="/procrastinot/">LOGO</a></li>
+
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a th:href="@{/add}">Add Task</a></li>
+                <li><a class="navlink" href="/delete">Delete Task</a></li>
 
                 <li><a th:href="@{/logIn}">Log In</a></li>
                 <li><a th:href="@{/register}">Sign Up</a></li>
-            <li>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-2" type="submit">Search</button>
-                </form>
+                <li>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-2" type="submit">Search</button>
+                    </form>
                 </li>
             </ul>
 
         </div>
     </div>
 
-    </div>
+</div>
 
 
 
