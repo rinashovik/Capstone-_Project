@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}">
+</head>
+<body>
+<header th:replace="~{fragments :: page-header}"></header>
+<div class="container body-content text-white text-bg-warning mt-3">
+
+    <main>
+        <form action='/delete' method='POST'>
+            <h3>Delete Task</h3>
+            <th:block th:each="job : ${jobs}">
+                <label>
+                    <input type="checkbox" name="jobId" th:value="${job.id}" />
+                    <span th:text="${job.description}"></span> <!-- implicitly calls toString() -->
+                </label><br />
+            </th:block>
+            <button class="delete btn btn-danger btn-md" type='submit'>Delete Task</button>
+        </form>
+    </main>
+</div>
+    </body>
+    </html>

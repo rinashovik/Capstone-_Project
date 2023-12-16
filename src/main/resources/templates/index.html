@@ -1,13 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head th:replace="fragments :: head"></head>
-<body class="container">
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}">
+</head>
+<body>
+<header th:replace="~{fragments :: page-header}"></header>
+<div class="container body-content g-col-8 text-white text-bg-secondary mt-3">
+        <h2 class="text-white text-bg-warning">New Tasks</h2>
 
-<header th:replace="fragments :: header"></header>
-<h1><strong>This page is a work in progress</strong></h1>
+<!--<table >-->
+    <div class="row">
 
-<h2><em>This will be our task list dashboard!</em></h2>
+        <div class="container">
+            <div class="job-listing">
 
-<a class="btn btn-primary" href="/logout">Log Out</a>
+            <div class="row align-items-start">
+                <div class="col">
+                    <ul >
+                        <div th:block th:each="job : ${tasks}">
+<!--                            <button th:for="description" class="btn btn-primary btn-md" type="submit">Update Task</button>-->
+<!--                            <button th:for="description" class="btn btn-danger btn-md" type="submit">Delete</button>-->
+
+                            <!--            <a th:href="@{'/view/' + ${job.id}}" th:text="${job.description}"></a>-->
+                            <input type="radio" name="tasks" th:value="${job.id}">
+
+                            <label th:text="${job.description}"></label>
+                        </div>
+<!--                        <button th:for="description" class="btn btn-primary btn-md" type="submit">Update Task</button>-->
+
+                    </ul>
+                </div>
+            </div>
+<!--        </div>-->
+<!--</div>-->
+
+    </div>
+</div>
+<div>
+    <form method="post"  class=" container d-flex d-grid" >
+        <div class="form-group">
+            <!--        <label th:for="description">Task Description</label>-->
+<!--            <button th:for="description" class="btn btn-success btn-md" type="submit">Add Task</button>-->
+
+            <button th:for="description" class="btn btn-success btn-md" type="submit"><a th:href="@{/add}"></a>Add Task</button>
+            <!--            <li><a th:href="@{/add}">Add Task</a></li>-->
+            <input class="form-control" th:field="${task.description}" type="text" placeholder="Try Typing" />
+            <span th:errors="${task.description}" class="error"></span>
+        </div>
+        <!--            <input type="submit" value="Add Task" /> doesn't effect-->
+    </form>
+</div>
 </body>
 </html>
