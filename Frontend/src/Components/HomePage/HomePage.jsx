@@ -18,5 +18,4 @@ const HomePage = () => {
   );
 };
 
-sdfsasd
 export default HomePage;
