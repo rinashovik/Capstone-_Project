@@ -3,20 +3,24 @@ package org.launchCode.procrastiNOT.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.launchCode.procrastiNOT.config.ValidationUtil;
 import org.launchCode.procrastiNOT.data.UserRepository;
 import org.launchCode.procrastiNOT.models.User;
 import org.launchCode.procrastiNOT.models.dto.LoginFormDTO;
 import org.launchCode.procrastiNOT.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
+@CrossOrigin("http://localhost:3000")
 public class AuthenticationController {
 
     @Autowired
@@ -49,13 +53,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
-                                          Errors errors, HttpServletRequest request,
-                                          Model model) {
+    public ResponseEntity<Map<String, Object>> processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerFormDTO,
+                                                                       Errors errors, HttpServletRequest request, Model model) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Register");
-            return "register";
+            // Log validation errors
+            errors.getAllErrors().forEach(error -> System.err.println(error));
+
+            // Construct and return validation errors in the expected format
+            Map<String, Object> response = new HashMap<>();
+            response.put("errors", ValidationUtil.getErrorsMap(errors));
+            return ResponseEntity.badRequest().body(response);
         }
 
         User existingUser = userRepository.findByUsername(registerFormDTO.getUsername());
@@ -64,13 +72,13 @@ public class AuthenticationController {
         if (existingUser != null) {
             errors.rejectValue("username", "username.alreadyexists", "That username already exists, try a different one");
             model.addAttribute("title", "Register");
-            return "register";
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "User with the given username already exists"));
         }
 
         if (existingUserByEmail != null) {
             errors.rejectValue("email", "email.alreadyexists", "That email already exists, try a different one.");
             model.addAttribute("title", "Register");
-            return "register";
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "User with the given email already exists"));
         }
 
         String password = registerFormDTO.getPassword();
@@ -78,14 +86,14 @@ public class AuthenticationController {
         if (!password.equals(verifyPassword)) {
             errors.rejectValue("password", "passwords.mismatch", "Passwords do not match, please try again.");
             model.addAttribute("title", "Register");
-            return "register";
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Passwords do not match"));
         }
 
-        User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getEmail(),registerFormDTO.getPassword());
+        User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getEmail(), password, verifyPassword);
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
 
-        return "redirect:";
+        return ResponseEntity.ok(Collections.emptyMap());
     }
 
     @GetMapping("/login")
@@ -96,13 +104,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
-                                   Errors errors, HttpServletRequest request,
-                                   Model model) {
+    public ResponseEntity<Map<String, Object>> processLoginForm(@ModelAttribute @Valid LoginFormDTO loginFormDTO,
+                                                                Errors errors, HttpServletRequest request,
+                                                                Model model) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Log In");
-            return "login";
+            Map<String, Object> response = new HashMap<>();
+            response.put("errors", errors.getAllErrors());
+            return ResponseEntity.badRequest().body(response);
         }
 
         User theUser = userRepository.findByUsername(loginFormDTO.getUsername());
@@ -110,25 +119,32 @@ public class AuthenticationController {
         if (theUser == null) {
             errors.rejectValue("username", "user.invalid", "The given username does not exist");
             model.addAttribute("title", "Log In");
-            return "login";
+
+            // Initialize the response map
+            Map<String, Object> response = new HashMap<>();
+            response.put("errors", Collections.singletonMap("username", "The given username does not exist"));
+            return ResponseEntity.badRequest().body(response);
         }
 
         String password = loginFormDTO.getPassword();
 
         if (!theUser.isMatchingPassword(password)) {
-            errors.rejectValue("password", "password.invalid", "Invalid password");
+            errors.rejectValue("password", "password.invalid", "Incorrect password");
             model.addAttribute("title", "Log In");
-            return "login";
+
+            // Initialize the response map
+            Map<String, Object> response = new HashMap<>();
+            response.put("errors", Collections.singletonMap("password", "Incorrect password"));
+            return ResponseEntity.badRequest().body(response);
         }
 
         setUserInSession(request.getSession(), theUser);
-
-        return "redirect:";
+        return ResponseEntity.ok(Collections.emptyMap());
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public ResponseEntity<String> logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "redirect:/login";
+        return ResponseEntity.ok("success");
     }
 }
